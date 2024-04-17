@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Listings</title>
+    <link rel="stylesheet" href="stylerealestate.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <button id="contactButton">Contact Sellers/Agents</button>
+            <button id="favouriteListings">Favourite Listings</button>
+            <ul id="Favourites" style="display: none;">
+                
+            </ul>
+        </div>
+        <div id="ContactPopup" class="popup" style="display:none;">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <h3>Sellers/Agents Contact Details</h3>
+                <p>Name: Mark Martirosyan</p>
+                <p>Number: 07587-488699</p>
+                <p>Email: martirosyanmark515@gmail.com</p>
+            </div>
+        </div>
+        <div class="content">
+        <header>
+            <h1>Real Estate Listings</h1>
+            <input type="text" id="searchBar" placeholder="Search listings...">
+        </header>
+        <section id="listings">
+            <!-- Listings will be displayed here -->
+        </section>
+        </div>
+    </div>
+    <script src="funcrealestate.js"></script>
+</body>
+</html>
