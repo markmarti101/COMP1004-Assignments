@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const displayListings = (listings) => {
         listingsElement.innerHTML = listings.map(listing => {
-            console.log("InnerHTML set for listings: ", listingsElement.innerHTML);
-            console.log(listing.image);
             return `
                 <div class="listing">
                     <img src="${listing.image}" alt="${listing.title}">
@@ -44,6 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 
+
+
     const addFavourite = (title) => {
         const listItem = document.createElement('li');
         listItem.textContent = title;
@@ -57,6 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const filterListings = (event) => {
+        const searchText = event.target.value.toLowerCase();
+        const filteredListings = listings.filter(listing => 
+            listing.title.toLowerCase().includes(searchText) ||
+            listing.description.toLowerCase().includes(searchText)
+        );
+        displayListings(filteredListings);
+    };
+
+
+    searchBar.addEventListener('input', filterListings);
+
+    displayListings(listings);
+
+
     favouriteListingsbutton.addEventListener('click', () => {
         if (favoritesList.style.display === 'none') {
             favoritesList.style.display = 'block';
@@ -64,17 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
             favoritesList.style.display = 'none';
         }
     });
-    const filterListings = (event) => {
-        const searchText = event.target.value.toLowerCase();
-        const filteredListings = listings.filter(listing => listing.title.toLowerCase().includes(searchText) ||
-            listing.description.toLowerCase().includes(searchText)
-        );
-        displayListings(filteredListings);
-    };
-
-    searchBar.addEventListener('input', filterListings);
-
-    displayListings(listings);
 
     document.getElementById('contactButton').addEventListener('click', function () {
         document.getElementById('ContactPopup').style.display = 'flex';
@@ -89,5 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
     closemanageUsersPopup.addEventListener('click', () => {
         manageUsersPopup.style.display = 'none';
     });
+
 });
 
