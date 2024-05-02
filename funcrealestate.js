@@ -5,27 +5,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const manageUsersButton = document.getElementById('manageUsersButton');
     const manageUsersPopup = document.getElementById('manageUsersPopup');
     const closemanageUsersPopup = manageUsersPopup.querySelector('.close');
+    const favoritesList = document.getElementById('Favourites');
 
+    // Encode the provided API credentials for Basic Auth
+    const basicAuth = btoa('simplyrets:simplyrets');
 
-    const listings = [
-        { title: 'Modern Apartment in City Center', image: 'images/apartment1.jpg', price: '$1200/mo', description: '2 bed, 2 bath, balcony' },
-        { title: 'Cozy Suburban House', image: 'images/house1.jpg', price: '$1500/mo', description: '3 bed, 2 bath, garden' },
-        // ... more listings
-    ];
+    // Function to fetch listings from the API
+    const fetchListings = async (searchText = '') => {
+        try {
+            const url = `https://api.simplyrets.com/properties?q=${searchText}`;
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Basic ${basicAuth}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching properties:', error);
+            listingsElement.innerHTML = '<p>Error loading listings. Please check console for details.</p>';
+        }
+    };
 
+    // Function to display listings on the webpage
     const displayListings = (listings) => {
+        if (listings.length === 0) {
+            listingsElement.innerHTML = '<p>No listings found.</p>';
+            return;
+        }
         listingsElement.innerHTML = listings.map(listing => {
+            const { address, photos, listPrice, property } = listing;
             return `
                 <div class="listing">
-                    <img src="${listing.image}" alt="${listing.title}">
-                    <h3>${listing.title}</h3>
-                    <p>${listing.price}</p>
-                    <p>${listing.description}</p>
-                    <span class="star" data-title="${listing.title}">&#9734;</span>
+                    <img src="${photos[0]}" alt="Listing at ${address.full}">
+                    <h3>${address.full}</h3>
+                    <p>$${listPrice.toLocaleString()}</p>
+                    <p>${property.bedrooms} beds, ${property.bathsFull + (property.bathsHalf ? 0.5 : 0)} baths, ${property.area} sqft</p>
+                    <button class="star" data-title="${address.full}">&#9734;</button>
                 </div>
             `;
         }).join('');
 
+        // Event listeners for favorite buttons
         document.querySelectorAll('.star').forEach(star => {
             star.addEventListener('click', function () {
                 this.classList.toggle('favorited');
@@ -38,17 +62,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-
     };
 
-
-
-
+    // Add listing to favorites
     const addFavourite = (title) => {
         const listItem = document.createElement('li');
         listItem.textContent = title;
         favoritesList.appendChild(listItem);
     };
+
+    // Remove listing from favorites
     const removeFavourite = (title) => {
         Array.from(favoritesList.children).forEach(item => {
             if (item.textContent === title) {
@@ -57,32 +80,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const filterListings = (event) => {
-        const searchText = event.target.value.toLowerCase();
-        const filteredListings = listings.filter(listing => 
-            listing.title.toLowerCase().includes(searchText) ||
-            listing.description.toLowerCase().includes(searchText)
-        );
-        displayListings(filteredListings);
-    };
+    // Event listener for input in search bar to filter listings
+    searchBar.addEventListener('input', function () {
+        fetchListings(this.value).then(displayListings);
+    });
 
+    // Load initial listings with no query to display default set
+    fetchListings().then(displayListings).catch(error => console.error('Failed to load initial listings:', error));
 
-    searchBar.addEventListener('input', filterListings);
-
-    displayListings(listings);
-
-
+    // UI interactions
     favouriteListingsbutton.addEventListener('click', () => {
-        if (favoritesList.style.display === 'none') {
-            favoritesList.style.display = 'block';
-        } else {
-            favoritesList.style.display = 'none';
-        }
+        favoritesList.style.display = favoritesList.style.display === 'none' ? 'block' : 'none';
     });
 
     document.getElementById('contactButton').addEventListener('click', function () {
         document.getElementById('ContactPopup').style.display = 'flex';
     });
+
     document.querySelector('.close').addEventListener('click', function () {
         document.getElementById('ContactPopup').style.display = 'none';
     });
@@ -90,9 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
     manageUsersButton.addEventListener('click', () => {
         manageUsersPopup.style.display = 'flex';
     });
+
     closemanageUsersPopup.addEventListener('click', () => {
         manageUsersPopup.style.display = 'none';
     });
-
 });
-
