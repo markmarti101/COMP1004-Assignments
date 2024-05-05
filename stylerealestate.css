@@ -1,102 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
+:root {
+    --primary-color: #2a2a72;
+    --background-color: #f4f4f9;
+    --text-color: #333;
+    --button-bg-color: #f8f8f8;
+    --button-hover-color: #e2e2e2;
+}
+
 body, html {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .container {
     display: flex;
-    max-width: 900px;
+    max-width: 1200px;
     height: 100vh;
     margin: 0 auto;
     padding: 20px;
-    flex-wrap: nowrap;
 }
 
-.sidebar {
-    width: 250px;
-    background-color: lightgray;
-    padding: 20px;
-    height: 100vh;
-}
-
-*, *:before, *:after {
-    box-sizing: border-box;
-}
-
-.popup {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.popup-content {
+aside.sidebar, main.content {
     background-color: #fff;
     padding: 20px;
-    right: 10px;
-    top: 5px;
-    font-size: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.close {
-    cursor: pointer;
-    position: absolute;
-    right: 10px;
-    top: 5px;
-    font-size: 30px;
+aside.sidebar {
+    width: 250px;
 }
 
-.close:hover {
-    color:red;
-}
-
-.content {
+main.content {
     flex-grow: 1;
-    padding: 20px;
-    background-color: #ffffff;
-}
-
-.star {
-    cursor: pointer;
-    font-size: 24px;
-    color: gray;
-    transition: color 0.3s;
-}
-
-.star.favorited {
-    color: gold;
+    overflow: auto;
 }
 
 header {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5em;
-    color: #2a2a72;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    margin-bottom: 0.5em;
-    animation: fadeIn 2s ease-in-out;
-    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 2em;
-    }
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translatey(-20px);}
-    to {opacity: 1; transform: translateY(0); }
-
-}
 #searchBar {
     width: 100%;
     padding: 10px;
@@ -104,59 +51,86 @@ header {
     margin-top: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
+    outline: none;
 }
 
-#listings {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-#Favourites {
-    list-style-type: none;
-    padding: 0;
-}
-
-.listing {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    width: calc(33% - 20px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+#searchBar:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 8px rgba(0,86,179,0.2);
 }
 
 .listing img {
-    max-width: 100%;
-    height: auto;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
     border-radius: 5px;
-}
-
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
-    .sidebar {
-        width: 100%;
-        order: -1;
-    }
-    .listing {
-        width: calc(50% - 20px);
-    }
 }
 
 .sidebar button {
-    display: block;
-    width: calc(100% - 40px); /* Adjust width accounting for padding */
+    width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #f8f8f8;
+    background-color: var(--button-bg-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.sidebar button:hover {
-    background-color: #e2e2e2;
+.sidebar button:hover, .sidebar button:focus {
+    background-color: var(--button-hover-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+    z-index: 1000; /* Ensures it stays on top */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    transition: transform 0.3s ease-out;
+    transform: translateY(-30px); /* This makes the popup appear to slide up */
+}
+
+.popup-content h3 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+.popup-content p {
+    color: var(--text-color);
+    font-size: 1.1em; /* Slightly larger text for readability */
+}
+
+.close {
+    float: right;
+    font-size: 1.5em;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+}
+
+.close:hover {
+    color: #f00;
+}
+
+/* This style will apply when the popup is displayed */
+.popup[hidden] {
+    display: none;
 }

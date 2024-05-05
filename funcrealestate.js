@@ -157,3 +157,18 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
     };
     fileReader.readAsText(event.target.files[0]);
 });
+
+document.getElementById('contactButton').addEventListener('click', function () {
+    document.getElementById('ContactPopup').style.display = 'flex';
+    document.getElementById('ContactPopup').style.opacity = '1';
+    document.getElementById('ContactPopup').style.transform = 'translateY(0)';
+});
+
+document.querySelector('.close').addEventListener('click', function () {
+    const popup = document.getElementById('ContactPopup');
+    popup.style.opacity = '0';
+    popup.style.transform = 'translateY(-30px)';
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 300); // Corresponds with the transition time
+});

@@ -8,41 +8,38 @@
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
+        <aside class="sidebar">
             <button id="contactButton">Contact Sellers/Agents</button>
             <button id="favouriteListings">Favourite Listings</button>
-            <button id="manageUsersButton">Manager Users</button>
             <button id="exportFavorites">Export Favorites</button>
             <button id="importFavorites">Import Favorites</button>
-            <input type="file" id="fileInput" style="display:none;" accept=".json">
-
-            <ul id="Favourites" style="display: none;">
-                
-            </ul>
+            <input type="file" id="fileInput" hidden accept=".json">
+            <ul id="Favourites" hidden></ul>
+        </aside>
+        <main class="content">
+            <header>
+                <h1>Real Estate Listings</h1>
+                <input type="search" id="searchBar" placeholder="Search listings..." aria-label="Search Listings">
+            </header>
+            <section id="listings">
+                <!-- Listings will be displayed here -->
+            </section>
+        </main>
+        <!-- Popup for Contact Details -->
+        <div id="ContactPopup" class="popup" hidden>
+            <article class="popup-content">
+                <button class="close" aria-label="Close popup">&times;</button>
+                <h3>Contact Details</h3>
+                <p><strong>Name:</strong> Mark Martirosyan</p>
+                <p><strong>Number:</strong> 07587-488699</p>
+                <p><strong>Email:</strong> martirosyanmark515@gmail.com</p>
+            </article>
         </div>
-        <div id="ContactPopup" class="popup" style="display:none;">
+        <div id="manageUsersPopup" class="popup" hidden>
             <div class="popup-content">
-                <span class="close">&times;</span>
-                <h3>Sellers/Agents Contact Details</h3>
-                <p>Name: Mark Martirosyan</p>
-                <p>Number: 07587-488699</p>
-                <p>Email: martirosyanmark515@gmail.com</p>
+                <button class="close">&times;</button>
+                <h3>Manage Users</h3>
             </div>
-        </div>
-        <div id="manageUsersPopup" class="popup" style="display:none;">
-            <div class="popup-content">
-                <span class="close">&times;</span>
-                <h3>Manager Users</h3>
-            </div>
-        </div>
-        <div class="content">
-        <header>
-            <h1>Real Estate Listings</h1>
-            <input type="text" id="searchBar" placeholder="Search listings...">
-        </header>
-        <section id="listings">
-            <!-- Listings will be displayed here -->
-        </section>
         </div>
     </div>
     <script src="funcrealestate.js"></script>
