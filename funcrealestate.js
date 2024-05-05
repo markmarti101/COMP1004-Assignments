@@ -109,3 +109,51 @@ document.addEventListener('DOMContentLoaded', () => {
         manageUsersPopup.style.display = 'none';
     });
 });
+
+document.getElementById('exportFavorites').addEventListener('click', () => {
+    try {
+        const favorites = [];
+        // Ensure the selector matches the list items in the favorites list
+        document.querySelectorAll('#Favourites li').forEach(item => {
+            favorites.push({ title: item.textContent.trim() }); // Trim text if necessary
+        });
+
+        if (favorites.length === 0) {
+            alert('No favorites to export.');
+            return; // Exit if there are no favorites
+        }
+
+        const blob = new Blob([JSON.stringify(favorites, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'favorites.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url); // Clean up the object URL
+    } catch (error) {
+        console.error('Error exporting favorites:', error);
+        alert('Failed to export favorites.');
+    }
+});
+
+
+document.getElementById('importFavorites').addEventListener('click', () => {
+    document.getElementById('fileInput').click();
+});
+
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function() {
+        const favorites = JSON.parse(this.result);
+        const favoritesList = document.getElementById('Favourites');
+        favoritesList.innerHTML = ''; // Clear existing favorites
+        favorites.forEach(fav => {
+            const listItem = document.createElement('li');
+            listItem.textContent = fav.title;
+            favoritesList.appendChild(listItem);
+        });
+    };
+    fileReader.readAsText(event.target.files[0]);
+});

@@ -144,3 +144,19 @@ header {
         width: calc(50% - 20px);
     }
 }
+
+.sidebar button {
+    display: block;
+    width: calc(100% - 40px); /* Adjust width accounting for padding */
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8f8f8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #e2e2e2;
+}
